@@ -1,20 +1,55 @@
+import { Ionicons } from '@expo/vector-icons';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { GlobalStyles } from './constants/styles';
+import HomeScreen from './screens/HomeScreen';
+import MealScreen from './screens/MealScreen';
 
-export default function App() {
+const BottomTabs = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
+
+function BottomTabsNavigator() {
   return (
-    <View style={styles.container}>
-      <Text>Hello Daily Bite!!!</Text>
-      <StatusBar style='auto' />
-    </View>
+    <BottomTabs.Navigator
+      screenOptions={{
+        tabBarActiveTintColor: GlobalStyles.colors.primary500,
+        tabBarShowLabel: false,
+      }}
+    >
+      <BottomTabs.Screen
+        name='Home'
+        component={HomeScreen}
+        options={{
+          title: 'Home',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name='home-outline' color={color} size={size} />
+          ),
+        }}
+      />
+    </BottomTabs.Navigator>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default function App() {
+  return (
+    <>
+      <StatusBar style='auto' />
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name='Tabs'
+            component={BottomTabsNavigator}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name='MealDetail'
+            component={MealScreen}
+            options={{ title: 'Detalji obroka' }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </>
+  );
+}
